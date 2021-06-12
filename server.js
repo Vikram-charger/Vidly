@@ -1,10 +1,28 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const Joi = require('joi');
+const helmet = require('helmet');
+const morgan = require('morgan');
+
+const logger = require('./logger.js');
+const authenticator = require('./authenticator.js');
 
 const app = express();
 
-app.use(bodyParser.json());
+
+// Built in middle wares.
+app.use(express.json()); // middleware function
+app.use(express.urlencoded({ extended: true })); // key=value&key=value
+app.use(express.static('public')); // For to serve static files.
+app.use(helmet());
+
+if(app.get('env') === 'development'){
+    app.use(morgan('tiny'));
+    console.log('Morgan Enabled..');
+}
+
+// Defined  middle wares.
+app.use(logger);
+app.use(authenticator);
 
 // stored data
 const genres = [
