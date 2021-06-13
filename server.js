@@ -2,6 +2,7 @@ const express = require('express');
 const Joi = require('joi');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const config = require('config');
 
 const logger = require('./logger.js');
 const authenticator = require('./authenticator.js');
@@ -14,6 +15,10 @@ app.use(express.json()); // middleware function
 app.use(express.urlencoded({ extended: true })); // key=value&key=value
 app.use(express.static('public')); // For to serve static files.
 app.use(helmet());
+
+console.log('Application Name:' + config.get('name'));
+console.log('Mail Server:' + config.get('mail.host'));
+console.log('Mail Password:' + config.get('mail.password'));
 
 if(app.get('env') === 'development'){
     app.use(morgan('tiny'));
