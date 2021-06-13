@@ -3,7 +3,7 @@ const Joi = require('joi');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const config = require('config');
-
+const debug = require('debug')('app:startup');
 const logger = require('./logger.js');
 const authenticator = require('./authenticator.js');
 
@@ -22,8 +22,9 @@ console.log('Mail Password:' + config.get('mail.password'));
 
 if(app.get('env') === 'development'){
     app.use(morgan('tiny'));
-    console.log('Morgan Enabled..');
+    debug('Morgan Enabled');
 }
+
 
 // Defined  middle wares.
 app.use(logger);
