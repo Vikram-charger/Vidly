@@ -6,9 +6,10 @@ const config = require('config');
 const debug = require('debug')('app:startup');
 const logger = require('./logger.js');
 const authenticator = require('./authenticator.js');
-
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('views', './views'); // default
 
 // Built in middle wares.
 app.use(express.json()); // middleware function
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true })); // key=value&key=value
 app.use(express.static('public')); // For to serve static files.
 app.use(helmet());
 
+// Configuration
 console.log('Application Name:' + config.get('name'));
 console.log('Mail Server:' + config.get('mail.host'));
 console.log('Mail Password:' + config.get('mail.password'));
@@ -48,7 +50,7 @@ const genres = [
 
 // Get request.
 app.get('/', (req, res) => {
-    res.send("Welcome");
+    res.render('index', { title: 'Vidly app', message: 'Hello'});
 }); // Home request.
 
 app.get('/api/genres', (req, res) => {
